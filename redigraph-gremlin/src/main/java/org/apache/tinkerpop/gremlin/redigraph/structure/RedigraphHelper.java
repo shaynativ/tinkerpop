@@ -24,11 +24,11 @@ import org.neo4j.tinkerpop.api.Neo4jNode;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class Neo4jHelper {
+public final class RedigraphHelper {
 
     private static final String NOT_FOUND_EXCEPTION = "NotFoundException";
 
-    private Neo4jHelper() {
+    private RedigraphHelper() {
     }
 
     public static org.neo4j.tinkerpop.api.Neo4jDirection mapDirection(final Direction direction) {
@@ -56,11 +56,11 @@ public final class Neo4jHelper {
         return ex.getClass().getSimpleName().equals(NOT_FOUND_EXCEPTION);
     }
 
-    public static Neo4jNode getVertexPropertyNode(final Neo4jVertexProperty vertexProperty) {
+    public static Neo4jNode getVertexPropertyNode(final RedigraphVertexProperty vertexProperty) {
         return vertexProperty.vertexPropertyNode;
     }
 
-    public static void setVertexPropertyNode(final Neo4jVertexProperty vertexProperty, final Neo4jNode node) {
+    public static void setVertexPropertyNode(final RedigraphVertexProperty vertexProperty, final Neo4jNode node) {
         vertexProperty.vertexPropertyNode = node;
     }
 }

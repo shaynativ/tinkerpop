@@ -18,6 +18,7 @@
  */
 package org.apache.tinkerpop.gremlin.redigraph.structure;
 
+import org.apache.tinkerpop.gremlin.structure.Direction;
 import org.apache.tinkerpop.gremlin.structure.Element;
 import org.apache.tinkerpop.gremlin.structure.Property;
 import org.apache.tinkerpop.gremlin.structure.util.ElementHelper;
@@ -27,21 +28,21 @@ import org.neo4j.tinkerpop.api.Neo4jEntity;
 /**
  * @author Stephen Mallette (http://stephen.genoprime.com)
  */
-public final class Neo4jProperty<V> implements Property<V> {
+public final class RedigraphProperty<V> implements Property<V> {
 
     protected final Element element;
     protected final String key;
-    protected final Neo4jGraph graph;
+    protected final RedigraphGraph graph;
     protected V value;
     protected boolean removed = false;
 
-    public Neo4jProperty(final Element element, final String key, final V value) {
+    public RedigraphProperty(final Element element, final String key, final V value) {
         this.element = element;
         this.key = key;
         this.value = value;
-        this.graph = element instanceof Neo4jVertexProperty ?
-                ((Neo4jVertex) (((Neo4jVertexProperty) element).element())).graph :
-                ((Neo4jElement) element).graph;
+        this.graph = //element instanceof RedigraphVertexProperty ?
+                //((RedigraphElement) element).graph :
+                ((RedigraphElement) element).graph;
     }
 
     @Override
@@ -51,16 +52,8 @@ public final class Neo4jProperty<V> implements Property<V> {
 
     @Override
     public void remove() {
-        if (this.removed) return;
-        this.removed = true;
-        this.graph.tx().readWrite();
-        final Neo4jEntity entity = this.element instanceof Neo4jVertexProperty ?
-                ((Neo4jVertexProperty) this.element).vertexPropertyNode :
-                ((Neo4jElement) this.element).getBaseElement();
-        if (entity.hasProperty(this.key)) {
-            entity.removeProperty(this.key);
-        }
     }
+
 
     @Override
     public String key() {

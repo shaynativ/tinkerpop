@@ -21,18 +21,8 @@ package org.apache.tinkerpop.gremlin.redigraph.jsr223;
 import org.apache.tinkerpop.gremlin.jsr223.AbstractGremlinPlugin;
 import org.apache.tinkerpop.gremlin.jsr223.DefaultImportCustomizer;
 import org.apache.tinkerpop.gremlin.jsr223.ImportCustomizer;
-import org.apache.tinkerpop.gremlin.redigraph.process.traversal.LabelP;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jEdge;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jElement;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jGraph;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jGraphVariables;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jHelper;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jProperty;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jVertex;
-import org.apache.tinkerpop.gremlin.redigraph.structure.Neo4jVertexProperty;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.apache.tinkerpop.gremlin.redigraph.structure.*;
+import org.apache.tinkerpop.gremlin.redigraph.structure.RedigraphElement;
 
 /**
  * @author Stephen Mallette (http://stephen.genoprime.com)
@@ -46,15 +36,16 @@ public final class RedigraphGremlinPlugin extends AbstractGremlinPlugin {
     static {
         try {
             imports = DefaultImportCustomizer.build()
-                    .addClassImports(Neo4jEdge.class,
-                            Neo4jElement.class,
-                            Neo4jGraph.class,
-                            Neo4jGraphVariables.class,
-                            Neo4jHelper.class,
-                            Neo4jProperty.class,
-                            Neo4jVertex.class,
-                            Neo4jVertexProperty.class)
-                    .addMethodImports(LabelP.class.getMethod("of", String.class)).create();
+                    .addClassImports(RedigraphEdge.class,
+                            RedigraphElement.class,
+                            RedigraphGraph.class,
+                            RedigraphGraphVariables.class,
+                            RedigraphHelper.class,
+                            RedigraphProperty.class,
+                            RedigraphVertex.class,
+                            RedigraphVertexProperty.class)
+                    .create();
+//                    .addMethodImports(LabelP.class.getMethod("of", String.class)).create();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

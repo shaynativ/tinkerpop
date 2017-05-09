@@ -31,11 +31,11 @@ import java.util.Set;
 /**
  * @author Stephen Mallette (http://stephen.genoprime.com)
  */
-public abstract class Neo4jElement implements Element, WrappedElement<Neo4jEntity> {
-    protected final Neo4jGraph graph;
+public abstract class RedigraphElement implements Element {
+    protected final RedigraphGraph graph;
     protected final Neo4jEntity baseElement;
 
-    public Neo4jElement(final Neo4jEntity baseElement, final Neo4jGraph graph) {
+    public RedigraphElement(final Neo4jEntity baseElement, final RedigraphGraph graph) {
         this.baseElement = baseElement;
         this.graph = graph;
     }
@@ -70,11 +70,6 @@ public abstract class Neo4jElement implements Element, WrappedElement<Neo4jEntit
     @Override
     public int hashCode() {
         return ElementHelper.hashCode(this);
-    }
-
-    @Override
-    public Neo4jEntity getBaseElement() {
-        return this.baseElement;
     }
 
 

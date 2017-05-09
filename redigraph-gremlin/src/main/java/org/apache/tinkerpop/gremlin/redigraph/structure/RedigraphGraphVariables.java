@@ -30,56 +30,38 @@ import java.util.Set;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class Neo4jGraphVariables implements Graph.Variables {
+public final class RedigraphGraphVariables implements Graph.Variables {
 
-    private final Neo4jGraph graph;
-    private final Neo4jGraphAPI baseGraph;
+    private final RedigraphGraph graph;
 
-    protected Neo4jGraphVariables(final Neo4jGraph graph) {
+    protected RedigraphGraphVariables(final RedigraphGraph graph) {
         this.graph = graph;
-        baseGraph = graph.getBaseGraph();
     }
 
-    @Override
-    public Set<String> keys() {
-        this.graph.tx().readWrite();
-        final Set<String> keys = new HashSet<>();
-        for (final String key : this.baseGraph.getKeys()) {
-            if (!Graph.Hidden.isHidden(key))
-                keys.add(key);
-        }
-        return keys;
-    }
-
-    @Override
-    public <R> Optional<R> get(final String key) {
-        this.graph.tx().readWrite();
-        return this.baseGraph.hasProperty(key) ?
-                Optional.of((R) this.baseGraph.getProperty(key)) :
-                Optional.<R>empty();
-    }
-
-    @Override
-    public void set(final String key, final Object value) {
-        GraphVariableHelper.validateVariable(key, value);
-        this.graph.tx().readWrite();
-        try {
-            this.baseGraph.setProperty(key, value);
-        } catch (final IllegalArgumentException e) {
-            throw Graph.Variables.Exceptions.dataTypeOfVariableValueNotSupported(value, e);
-        }
-    }
-
-    @Override
-    public void remove(final String key) {
-        this.graph.tx().readWrite();
-        if (this.baseGraph.hasProperty(key))
-            this.baseGraph.removeProperty(key);
-    }
 
     @Override
     public String toString() {
         return StringFactory.graphVariablesString(this);
+    }
+
+    @Override
+    public Set<String> keys() {
+        return null;
+    }
+
+    @Override
+    public <R> Optional<R> get(String key) {
+        return null;
+    }
+
+    @Override
+    public void set(String key, Object value) {
+
+    }
+
+    @Override
+    public void remove(String key) {
+
     }
 
     public static class Neo4jVariableFeatures implements Graph.Features.VariableFeatures {

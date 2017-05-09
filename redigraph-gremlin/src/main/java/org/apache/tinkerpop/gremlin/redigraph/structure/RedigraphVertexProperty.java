@@ -37,28 +37,28 @@ import java.util.Set;
 /**
  * @author Marko A. Rodriguez (http://markorodriguez.com)
  */
-public final class Neo4jVertexProperty<V> implements VertexProperty<V> {
+public final class RedigraphVertexProperty<V> implements VertexProperty<V> {
 
-    protected final Neo4jVertex vertex;
+    protected final RedigraphVertex vertex;
     protected final String key;
     protected final V value;
     protected Neo4jNode vertexPropertyNode;
 
-    public Neo4jVertexProperty(final Neo4jVertex vertex, final String key, final V value) {
+    public RedigraphVertexProperty(final RedigraphVertex vertex, final String key, final V value) {
         this.vertex = vertex;
         this.key = key;
         this.value = value;
         this.vertexPropertyNode = null;
     }
 
-    public Neo4jVertexProperty(final Neo4jVertex vertex, final String key, final V value, final Neo4jNode vertexPropertyNode) {
+    public RedigraphVertexProperty(final RedigraphVertex vertex, final String key, final V value, final Neo4jNode vertexPropertyNode) {
         this.vertex = vertex;
         this.key = key;
         this.value = value;
         this.vertexPropertyNode = vertexPropertyNode;
     }
 
-    public Neo4jVertexProperty(final Neo4jVertex vertex, final Neo4jNode vertexPropertyNode) {
+    public RedigraphVertexProperty(final RedigraphVertex vertex, final Neo4jNode vertexPropertyNode) {
         this.vertex = vertex;
         this.key = (String) vertexPropertyNode.getProperty(T.key.getAccessor());
         this.value = (V) vertexPropertyNode.getProperty(T.value.getAccessor());
@@ -68,6 +68,16 @@ public final class Neo4jVertexProperty<V> implements VertexProperty<V> {
     @Override
     public Vertex element() {
         return this.vertex;
+    }
+
+    @Override
+    public void remove() {
+
+    }
+
+    @Override
+    public <U> Iterator<Property<U>> properties(String... propertyKeys) {
+        return null;
     }
 
     @Override
@@ -91,25 +101,6 @@ public final class Neo4jVertexProperty<V> implements VertexProperty<V> {
         return null != this.value;
     }
 
-    @Override
-    public <U> Iterator<Property<U>> properties(final String... propertyKeys) {
-        this.vertex.graph.tx().readWrite();
-        return this.vertex.graph.trait.getProperties(this, propertyKeys);
-    }
-
-    @Override
-    public <U> Property<U> property(final String key, final U value) {
-        this.vertex.graph.tx().readWrite();
-        ElementHelper.validateProperty(key, value);
-        return this.vertex.graph.trait.setProperty(this, key, value);
-    }
-
-    @Override
-    public void remove() {
-        this.vertex.graph.tx().readWrite();
-        this.vertex.graph.trait.removeVertexProperty(this);
-        this.vertexPropertyNode= null;
-    }
 
     @Override
     public Set<String> keys() {
@@ -120,6 +111,11 @@ public final class Neo4jVertexProperty<V> implements VertexProperty<V> {
                 keys.add(key);
         }
         return Collections.unmodifiableSet(keys);
+    }
+
+    @Override
+    public <V> Property<V> property(String key, V value) {
+        return null;
     }
 
     @Override
