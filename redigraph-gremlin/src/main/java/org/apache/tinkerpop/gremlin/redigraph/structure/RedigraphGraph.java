@@ -21,38 +21,48 @@ package org.apache.tinkerpop.gremlin.redigraph.structure;
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.tinkerpop.gremlin.process.computer.GraphComputer;
-import org.apache.tinkerpop.gremlin.process.traversal.TraversalStrategies;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.DefaultGraphTraversal;
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
-import org.apache.tinkerpop.gremlin.structure.Edge;
-import org.apache.tinkerpop.gremlin.structure.Graph;
-import org.apache.tinkerpop.gremlin.structure.Transaction;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
-import org.apache.tinkerpop.gremlin.structure.VertexProperty;
-import org.apache.tinkerpop.gremlin.structure.util.AbstractThreadLocalTransaction;
-import org.apache.tinkerpop.gremlin.structure.util.ElementHelper;
-import org.apache.tinkerpop.gremlin.structure.util.StringFactory;
-import org.apache.tinkerpop.gremlin.structure.util.wrapped.WrappedGraph;
-import org.apache.tinkerpop.gremlin.util.iterator.IteratorUtils;
-import org.neo4j.tinkerpop.api.Neo4jFactory;
-import org.neo4j.tinkerpop.api.Neo4jGraphAPI;
-import org.neo4j.tinkerpop.api.Neo4jNode;
-import org.neo4j.tinkerpop.api.Neo4jRelationship;
-import org.neo4j.tinkerpop.api.Neo4jTx;
+import org.apache.tinkerpop.gremlin.structure.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.tinkerpop.gremlin.redigraph.api.*;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
+import java.util.*;
 
 public final class RedigraphGraph implements Graph {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(RedigraphGraph.class);
+
+    private static final Configuration EMPTY_CONFIGURATION = new BaseConfiguration() {{
+        this.setProperty(Graph.GRAPH, RedigraphGraph.class.getName());
+    }};
+
+    private final Configuration configuration;
+
+    private final Client client;
+
+    private RedigraphGraph(final Configuration configuration) {
+        this.configuration = configuration;
+        this.client = new Client("localhost", 6379);
+    }
+
+    public static RedigraphGraph open() {
+        return open(EMPTY_CONFIGURATION);
+    }
+
+    public static RedigraphGraph open(final Configuration configuration) {
+        return new RedigraphGraph(configuration);
+    }
+
     @Override
     public Vertex addVertex(Object... keyValues) {
+        LOGGER.warn("addVertex");
+        Map<String, String> attributes = new HashMap<String, String>();
+
+        for (int i = 0; i < keyValues.length; i = i + 2) {
+            attributes.put(keyValues[i].toString(), keyValues[i+1].toString());
+        }
+        String id = client.createNode(attributes);
+        LOGGER.warn("gotid: " + id);
         return null;
     }
 
