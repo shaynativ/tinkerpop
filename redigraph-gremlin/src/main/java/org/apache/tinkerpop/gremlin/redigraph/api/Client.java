@@ -4,6 +4,7 @@ import redis.clients.jedis.BuilderFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,13 @@ public class Client {
         pool = new JedisPool(host, port);
     }
 
-    public String createNode(Map<String, String> propertyKeyValues) {
+    public String createNode(Object... propertyKeyValues) {
         Jedis conn = _conn();
-        String id = conn.getClient().sendCommand(Commands.Command.CREATENODE, "foo", "a", "1").getBulkReply();
+        String[] attributes = Arrays.copyOf(propertyKeyValues, propertyKeyValues.length, String[].class);
+
+        String nid = conn.getClient().sendCommand(Commands.Command.CREATENODE, attributes).getBulkReply();
         conn.close();
-        return id;
+        return nid;
     }
 
     public Map<String, String> getNodeById(String id) {

@@ -38,11 +38,14 @@ public final class RedigraphGraph implements Graph {
 
     private final Configuration configuration;
 
-    private final Client client;
+    private final RedisGraphAPI api;
+
+    private final String key;
 
     private RedigraphGraph(final Configuration configuration) {
         this.configuration = configuration;
-        this.client = new Client("localhost", 6379);
+        this.key = "foo";
+        this.api = new RedisGraphAPI(this.key);
     }
 
     public static RedigraphGraph open() {
@@ -56,13 +59,8 @@ public final class RedigraphGraph implements Graph {
     @Override
     public Vertex addVertex(Object... keyValues) {
         LOGGER.warn("addVertex");
-        Map<String, String> attributes = new HashMap<String, String>();
-
-        for (int i = 0; i < keyValues.length; i = i + 2) {
-            attributes.put(keyValues[i].toString(), keyValues[i+1].toString());
-        }
-        String id = client.createNode(attributes);
-        LOGGER.warn("gotid: " + id);
+        RedisNode node = api.createNode(keyValues);
+        LOGGER.warn("gotid: " + node.getId());
         return null;
     }
 
