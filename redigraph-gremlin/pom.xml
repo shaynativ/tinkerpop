@@ -46,7 +46,9 @@ limitations under the License.
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
-            <version>2.0</version>
+            <version>2.4.2</version>
+            <scope>system</scope>
+            <systemPath>/home/shay/dev/redis-graph-api/lib/commons-pool2-2.4.2.jar</systemPath>
         </dependency>
 
         <!-- TESTING -->
